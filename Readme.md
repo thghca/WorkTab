@@ -34,6 +34,8 @@ Finally, there will never be an 'autolabour' mode where a mod sets priorities fo
  - Bugo:	Russian translation (update)
  - Arex-rus:	Russian translation (fixes)
  - mora145:	Spanish translation
+ - Alex TD:	Various tweaks and suggestions
+ - Suh. Junmin:	Korean translation
 
 # Think you found a bug? 
 Please read [this guide](http://steamcommunity.com/sharedfiles/filedetails/?id=725234314) before creating a bug report,
@@ -54,4 +56,4 @@ Show your appreciation by buying me a coffee (or contribute towards a nice singl
 [![Buy Me a Coffee](http://i.imgur.com/EjWiUwx.gif)](https://ko-fi.com/fluffymods)
 
 # Version
-This is version 2.13.167, for RimWorld 0.19.2009.
+This is version 3.4.185, for RimWorld 1.0.2059.

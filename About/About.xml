@@ -3,7 +3,7 @@
   <name>Work Tab</name>
   <author>Fluffy</author>
   <url>https://ludeon.com/forums/index.php?topic=15964.0</url>
-  <targetVersion>0.19.2009</targetVersion>
+  <targetVersion>1.0.2059</targetVersion>
   <description>Provides a vastly more customizable work tab. 
 
 &lt;size=24&gt;Important&lt;/size&gt;
@@ -41,9 +41,11 @@ mercutiodesign:    Optional scrollwheel usage setting
 Bugo:    Russian translation (update)
 Arex-rus:    Russian translation (fixes)
 mora145:    Spanish translation
+Alex TD:    Various tweaks and suggestions
+Suh. Junmin:    Korean translation
 
 &lt;size=24&gt;Version&lt;/size&gt;
-This is version 2.13.167, for RimWorld 0.19.2009.
+This is version 3.4.185, for RimWorld 1.0.2059.
 
 </description>
 </ModMetaData>
