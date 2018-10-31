@@ -15,12 +15,12 @@ namespace WorkTab
             // intercept interactions before base has a chance to act on them
             if (Event.current.shift && Mouse.IsOver(rect))
             {
-                if (RightClicked(rect) || ScrolledUp(rect))
+                if (ScrolledUp(rect))
                 {
                     Increment(pawn);
                     return;
                 }
-                if (LeftClicked(rect) || ScrolledDown(rect))
+                if (ScrolledDown(rect))
                 {
                     Decrement(pawn);
                     return;
