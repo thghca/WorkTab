@@ -351,9 +351,9 @@ namespace WorkTab
             else if ( def.sortable )
             {
                 if ( LeftClicked( rect ) )
-                    Sort( table );
-                if ( RightClicked( rect ) )
                     Sort( table, false );
+                if ( RightClicked( rect ) )
+                    Sort( table );
             }
         }
 
