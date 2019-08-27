@@ -24,7 +24,7 @@ namespace WorkTab
 
         public static Settings Get()
         {
-            return LoadedModManager.GetMod<WorkTab.Mod>().GetSettings<Settings>();
+            return LoadedModManager.GetMod<WorkTab.Controller>().GetSettings<Settings>();
         }
         public Settings()
         {
