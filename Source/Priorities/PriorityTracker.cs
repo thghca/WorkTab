@@ -55,7 +55,33 @@ namespace WorkTab
             if ( !priorities.Any() )
                 return 0;
 
-            return Find.PlaySettings.useWorkPriorities ? priorities.Min() : 3;
+            //return the most common number
+            if (Find.PlaySettings.useWorkPriorities)
+            {
+                //count each priority level, track highest
+                Dictionary<int, int> priorityCount = new Dictionary<int, int>();
+                int highestCount = 0;
+                int commonPriority = 0;
+
+                foreach (var p in priorities)
+                {
+                    int count = 1;
+                    if (priorityCount.ContainsKey(p))
+                        count = priorityCount[p] + 1;
+                    priorityCount[p] = count;
+
+                    if (count > highestCount)
+                    {
+                        highestCount = count;
+                        commonPriority = p;
+                    }
+                }
+
+                return commonPriority;
+            }
+
+            // or, in simple mode, just 3.
+            return 3;
         }
 
         public int[] GetPriorities( WorkGiverDef workgiver )
@@ -72,10 +98,10 @@ namespace WorkTab
 
         public void SetPriority(WorkGiverDef workgiver, int priority, int hour, bool recache = true )
         {
-            if (priority > Settings.maxPriority)
+            if (priority > Settings.Get().maxPriority)
                 priority = 0;
             if (priority < 0)
-                priority = Settings.maxPriority;
+                priority = Settings.Get().maxPriority;
 
             this[workgiver][hour] = priority;
 
