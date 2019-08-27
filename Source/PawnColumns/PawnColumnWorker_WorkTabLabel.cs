@@ -15,12 +15,12 @@ namespace WorkTab
             // intercept interactions before base has a chance to act on them
             if ( Shift && Mouse.IsOver(rect))
             {
-                if (RightClicked(rect) || ScrolledUp(rect))
+                if (ScrolledUp(rect))
                 {
                     Increment(pawn);
                     return;
                 }
-                if (LeftClicked(rect) || ScrolledDown(rect))
+                if (ScrolledDown(rect))
                 {
                     Decrement(pawn);
                     return;
@@ -62,7 +62,7 @@ namespace WorkTab
                 {
                     if (priority == 0)
                     {
-                        priority = Settings.maxPriority;
+                        priority = Settings.Get().maxPriority;
                         actionTaken = true;
                     }
                     else if (priority != 1)
@@ -82,7 +82,7 @@ namespace WorkTab
                 pawn.SetPriority(workgiver, priority, MainTabWindow_WorkTab.SelectedHours);
             }
 
-            if (actionTaken && Settings.playSounds)
+            if (actionTaken && Settings.Get().playSounds)
                 SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
         }
 
@@ -101,7 +101,7 @@ namespace WorkTab
                 // detailed mode
                 if (PriorityManager.ShowPriorities)
                 {
-                    if (priority == Settings.maxPriority)
+                    if (priority == Settings.Get().maxPriority)
                     {
                         priority = 0;
                         actionTaken = true;
@@ -124,7 +124,7 @@ namespace WorkTab
                 pawn.SetPriority(workgiver, priority, MainTabWindow_WorkTab.SelectedHours);
             }
 
-            if (actionTaken && Settings.playSounds)
+            if (actionTaken && Settings.Get().playSounds)
                 SoundDefOf.AmountDecrement.PlayOneShotOnCamera();
         }
     }

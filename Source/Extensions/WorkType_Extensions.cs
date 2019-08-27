@@ -58,13 +58,13 @@ namespace WorkTab
                 hour = GenLocalDate.HourOfDay(pawn);
 
             // get and decrement priority
-            int priority = pawn.GetPriority( worktype, hour );
-            pawn.SetPriority(worktype, priority - 1, hours);
+            int priority = pawn.GetMinPriority( worktype, hour );
+            pawn.ChangePriority(worktype, -1, hours);
 
             // play sounds
-            if ( Settings.playSounds && playSound && priority > 1 )
+            if (Settings.Get().playSounds && playSound && priority > 1 )
                 SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
-            if ( Settings.playSounds && playSound && priority == 1 )
+            if (Settings.Get().playSounds && playSound && priority == 1 )
                 SoundDefOf.AmountDecrement.PlayOneShotOnCamera();
         }
 
@@ -75,13 +75,13 @@ namespace WorkTab
                 hour = GenLocalDate.HourOfDay( pawn );
 
             // get and increment priority
-            int priority = pawn.GetPriority( worktype, hour );
-            pawn.SetPriority( worktype, priority + 1, hours );
+            int priority = pawn.GetMaxPriority( worktype, hour );
+            pawn.ChangePriority( worktype, 1, hours );
 
             // play sounds
-            if (Settings.playSounds && playSound && priority ==  0)
+            if (Settings.Get().playSounds && playSound && priority ==  0)
                 SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
-            if (Settings.playSounds && playSound && priority > 0 )
+            if (Settings.Get().playSounds && playSound && priority > 0 )
                 SoundDefOf.AmountDecrement.PlayOneShotOnCamera();
         }
 
@@ -96,7 +96,7 @@ namespace WorkTab
                 hour = GenLocalDate.HourOfDay(pawns.FirstOrDefault());
 
             // play sounds
-            if ( Settings.playSounds && playSound && pawns.Any(p => p.GetPriority(worktype, hour) != 1))
+            if (Settings.Get().playSounds && playSound && pawns.Any(p => p.GetMinPriority(worktype, hour) != 1))
                 SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
 
             // decrease priorities that are not 1 only (no wrapping around once we're at max priority)
@@ -115,7 +115,7 @@ namespace WorkTab
                 hour = GenLocalDate.HourOfDay(pawns.FirstOrDefault());
 
             // play sounds
-            if (Settings.playSounds && playSound && pawns.Any(p => p.GetPriority(worktype, hour) > 0))
+            if (Settings.Get().playSounds && playSound && pawns.Any(p => !p.AnyGiverMissingPriority(worktype, hour) ))
                 SoundDefOf.AmountDecrement.PlayOneShotOnCamera();
 
             // increase priorities that are > 0 only (no wrapping around once we're at min priority

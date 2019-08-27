@@ -105,7 +105,7 @@ namespace WorkTab
 
                 // get new priority, play crunch if it wasn't pretty
                 int newPriority = pawn.GetPriority( def.workType, -1 );
-                if ( Settings.playSounds && Settings.playCrunch &&
+                if (Settings.Get().playSounds && Settings.Get().playCrunch &&
                      oldpriority == 0 && newPriority > 0 &&
                      pawn.skills.AverageOfRelevantSkillsFor( def.workType ) <= 2f )
                 {
@@ -144,15 +144,15 @@ namespace WorkTab
                 if ( active )
                 {
                     pawn.SetPriority( def.workType, 0, SelectedHours );
-                    if (Settings.playSounds)
+                    if (Settings.Get().playSounds)
                         SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
                 }
                 else
                 {
-                    pawn.SetPriority( def.workType, Mathf.Min( Settings.maxPriority, 3 ), SelectedHours );
-                    if (Settings.playSounds)
+                    pawn.SetPriority( def.workType, Mathf.Min(Settings.Get().maxPriority, 3 ), SelectedHours );
+                    if (Settings.Get().playSounds)
                         SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
-                    if (Settings.playSounds && Settings.playCrunch && pawn.skills.AverageOfRelevantSkillsFor( def.workType ) <= 2f )
+                    if (Settings.Get().playSounds && Settings.Get().playCrunch && pawn.skills.AverageOfRelevantSkillsFor( def.workType ) <= 2f )
                     {
                         SoundDefOf.Crunch.PlayOneShotOnCamera();
                     }
@@ -176,7 +176,7 @@ namespace WorkTab
             Text.Font = GameFont.Small;
             Rect labelRect = rect;
 
-            if ( Settings.verticalLabels )
+            if (Settings.Get().verticalLabels )
                 DrawVerticalHeader( rect, table );
             else
                 DrawHorizontalHeader( rect, table, out labelRect );
@@ -289,7 +289,7 @@ namespace WorkTab
             }
         }
 
-        public override int GetMinHeaderHeight( PawnTable table ) { return Settings.verticalLabels ? VerticalHeaderHeight : HorizontalHeaderHeight; }
+        public override int GetMinHeaderHeight( PawnTable table ) { return Settings.Get().verticalLabels ? VerticalHeaderHeight : HorizontalHeaderHeight; }
 
         private Rect GetLabelRect( Rect headerRect )
         {
@@ -322,9 +322,9 @@ namespace WorkTab
                     var pawns = CapablePawns;
                     if ( ScrolledUp( headerRect, true ) || RightClicked( headerRect ) )
                     {
-                        if ( pawns.Any( p => p.GetPriority( def.workType, VisibleHour ) != 0 ) )
+                        if ( pawns.Any( p => p.GetMinPriority( def.workType, VisibleHour ) != 0 ) )
                         {
-                            if (Settings.playSounds)
+                            if (Settings.Get().playSounds)
                                 SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
                             foreach ( Pawn pawn in pawns )
                                 pawn.SetPriority( def.workType, 0, SelectedHours );
@@ -333,9 +333,9 @@ namespace WorkTab
 
                     if ( ScrolledDown( headerRect, true ) || LeftClicked( headerRect ) )
                     {
-                        if ( pawns.Any( p => p.GetPriority( def.workType, VisibleHour ) == 0 ) )
+                        if ( pawns.Any( p => p.GetMaxPriority( def.workType, VisibleHour ) == 0 ) )
                         {
-                            if (Settings.playSounds)
+                            if (Settings.Get().playSounds)
                                 SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
                             foreach ( Pawn pawn in pawns )
                                 pawn.SetPriority( def.workType, 3, SelectedHours );
@@ -351,9 +351,9 @@ namespace WorkTab
             else if ( def.sortable )
             {
                 if ( LeftClicked( headerRect ) )
-                    Sort( table );
-                if ( RightClicked( headerRect ) )
                     Sort( table, false );
+                if ( RightClicked( headerRect ) )
+                    Sort( table );
             }
         }
 

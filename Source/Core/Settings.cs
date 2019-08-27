@@ -2,6 +2,7 @@
 // Settings.cs
 // 2017-05-22
 
+using System.Collections.Generic;
 using System.Resources;
 using UnityEngine;
 using Verse;
@@ -10,21 +11,28 @@ namespace WorkTab
 {
     public class Settings: ModSettings
     {
-        public static int maxPriority = 9;
-        public static bool playCrunch = true;
-        public static bool playSounds = true;
-        public static bool TwentyFourHourMode = true;
-        public static bool disableScrollwheel = false;
-        public static bool verticalLabels = true;
-        // public static bool sharedFavourites = true;
-        private static bool _fontFix = true;
 
+        public int maxPriority = 9;
+        public bool showPriorityColors = false;
+        public List<string> priorityColors;
+        public bool playCrunch = true;
+        public bool playSounds = true;
+        public bool TwentyFourHourMode = true;
+        public bool disableScrollwheel = false;
+        public bool verticalLabels = true;
+        private bool _fontFix = true;
+
+        public static Settings Get()
+        {
+            return LoadedModManager.GetMod<WorkTab.Mod>().GetSettings<Settings>();
+        }
         public Settings()
         {
             ApplyFontFix( _fontFix );
+            priorityColors = new List<string> { "00ff00", "e6cf89", "808080" };
         }
 
-        public static void ApplyFontFix( bool state )
+        public void ApplyFontFix( bool state )
         {
             LongEventHandler.ExecuteWhenFinished( delegate
             {
@@ -35,15 +43,16 @@ namespace WorkTab
             } );
         }
 
-        // buffers
-        private static bool _fontFixBuffer = _fontFix;
-        private static string _maxPriorityBuffer = maxPriority.ToString();
+        // buffers;
 
-        public static void DoWindowContents( Rect rect )
-        { 
+        public void DoWindowContents( Rect rect )
+        {
             var options = new Listing_Standard();
             options.Begin(rect);
-            options.TextFieldNumericLabeled<int>("WorkTab.MaxPriority".Translate(), ref maxPriority, ref _maxPriorityBuffer, 4, 9, "WorkTab.MaxPriorityTip".Translate(), 1 / 8f);
+            options.TextFieldNumericLabeled<int>("WorkTab.MaxPriority".Translate(), ref maxPriority, maxPriority.ToString(), 4, 9, "WorkTab.MaxPriorityTip".Translate(), 1 / 8f);
+            options.CheckboxLabeled("WorkTab.ShowPriorityColors".Translate(), ref showPriorityColors, "WorkTab.PriorityColorsTip".Translate()); 
+            if (showPriorityColors)
+                options.ColorBoxes(ref priorityColors, "WorkTab.PriorityColorsTip".Translate());
             options.CheckboxLabeled("WorkTab.24HourMode".Translate(), ref TwentyFourHourMode, "WorkTab.24HourModeTip".Translate() );
             options.CheckboxLabeled("WorkTab.PlaySounds".Translate(), ref playSounds, "WorkTab.PlaySoundsTip".Translate());
             playCrunch = playSounds && playCrunch; // disabling sounds also disables crunch.
@@ -79,6 +88,8 @@ namespace WorkTab
         public override void ExposeData()
         {
             Scribe_Values.Look(ref maxPriority, "MaxPriority", 9);
+            Scribe_Values.Look(ref showPriorityColors, "ShowCustomColors", false);
+            Scribe_Collections.Look(ref priorityColors, "PriorityColors");    // Doesn't seem to accept defaults
             Scribe_Values.Look(ref TwentyFourHourMode, "TwentyFourHourMode", true);
             Scribe_Values.Look(ref playSounds, "PlaySounds", true);
             Scribe_Values.Look(ref playCrunch, "PlayCrunch", true);
@@ -89,6 +100,9 @@ namespace WorkTab
             // apply font-fix on load
             if ( Scribe.mode == LoadSaveMode.PostLoadInit )
                 ApplyFontFix( _fontFix );
+
+            if (priorityColors == null)
+                priorityColors = new List<string> { "00ff00", "e6cf89", "808080" };
         }
 
         #endregion
