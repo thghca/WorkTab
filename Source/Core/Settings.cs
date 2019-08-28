@@ -21,6 +21,7 @@ namespace WorkTab
         public bool disableScrollwheel = false;
         public bool verticalLabels = true;
         private bool _fontFix = true;
+        public bool ignoreZeroSubPriorities = true;
 
         public static Settings Get()
         {
@@ -70,7 +71,7 @@ namespace WorkTab
             bool _fontFixBuffer = _fontFix;
             options.CheckboxLabeled("WorkTab.FontFix".Translate(), ref _fontFixBuffer, "WorkTab.FontFixTip".Translate());
             _fontFixBuffer = verticalLabels && _fontFixBuffer; // disabling vertical labels makes the font fix unnecesary.
-
+            options.CheckboxLabeled("WorkTab.ignoreZeroSubPriorities".Translate(), ref ignoreZeroSubPriorities, "WorkTab.ignoreZeroSubPrioritiesTip".Translate());
             // apply any changes.
             if ( _fontFixBuffer != _fontFix )
                 ApplyFontFix( _fontFixBuffer );
@@ -96,6 +97,7 @@ namespace WorkTab
             Scribe_Values.Look(ref disableScrollwheel, "DisableScrollwheel", false);
             Scribe_Values.Look(ref verticalLabels, "VerticalLabels", true );
             Scribe_Values.Look(ref _fontFix, "FontFix", true );
+            Scribe_Values.Look(ref ignoreZeroSubPriorities, "IgnoreZeroSubPriorities", true);
 
             // apply font-fix on load
             if ( Scribe.mode == LoadSaveMode.PostLoadInit )

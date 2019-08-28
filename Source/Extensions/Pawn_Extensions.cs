@@ -120,7 +120,7 @@ namespace WorkTab
                 pawn.SetPriority( worktype, 0, null );
         }
 
-        public static void ChangePriority( this Pawn pawn, WorkTypeDef worktype, int diff, List<int> hours )
+        public static void ChangePriority( this Pawn pawn, WorkTypeDef worktype, int diff, List<int> hours)
         {
             foreach (int hour in (hours ?? WholeDay))
                 ChangePriority(pawn, worktype, diff, hour, false);
@@ -128,24 +128,32 @@ namespace WorkTab
             PriorityManager.Get[pawn].Recache(worktype);
         }
 
-        public static void ChangePriority(Pawn pawn, WorkTypeDef worktype, int diff, int hour, bool recache = true )
+        public static void ChangePriority(Pawn pawn, WorkTypeDef worktype, int diff, int hour, bool recache = true)
         {
             if (hour < 0)
                 hour = GenLocalDate.HourOfDay(pawn);
 
+            bool noChangeZeroPriority = Settings.Get().ignoreZeroSubPriorities && GetMaxPriority(pawn, worktype, hour) != 0;
+
             foreach (WorkGiverDef workgiver in worktype.WorkGivers())
-                ChangePriority(pawn, workgiver, diff, hour, false);
+                ChangePriority(pawn, workgiver, diff, hour, false, noChangeZeroPriority);
 
             if (recache)
                 PriorityManager.Get[pawn].Recache(worktype);
         }
 
-        public static void ChangePriority( this Pawn pawn, WorkGiverDef workgiver, int diff, int hour, bool recache = true )
+        public static void ChangePriority(this Pawn pawn, WorkGiverDef workgiver, int diff, int hour, bool recache = true, bool noChangeZeroPriority = false)
         {
             if (hour < 0)
                 hour = GenLocalDate.HourOfDay(pawn);
 
-            int priority = pawn.GetPriority(workgiver, hour) + diff;
+            int priority = pawn.GetPriority(workgiver, hour);
+
+            if (noChangeZeroPriority && priority == 0)
+                return;
+
+            priority+=diff;
+
             SetPriority(pawn, workgiver, priority, hour, recache);
         }
 
